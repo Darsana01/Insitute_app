@@ -5,6 +5,7 @@ import '../authentication/auth.dart';
 import 'bottom nav.dart';
 import 'forgot_pass.dart';
 
+
 void main(){
   runApp(MaterialApp(
     home: Login(),
@@ -39,6 +40,9 @@ class _RegistrationState extends State<Login> {
   }
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final double horizontalPadding = size.width * 0.1;
+    final double containerHeight = size.height * 0.9;
     return Scaffold(
         body: Stack(
             children: [
@@ -54,11 +58,12 @@ class _RegistrationState extends State<Login> {
                 ),
               ),
               Positioned(
-                bottom: 100,
-                top:100,
-                right: 100,
-                left:100,
+                top: size.height * 0.1,
+                left: horizontalPadding,
+                right: horizontalPadding,
                 child: Container(
+                  width: size.width * 0.8,
+                  height: containerHeight,
                   decoration: BoxDecoration(
                     color: Colors.white30,
                     boxShadow: [
@@ -72,138 +77,139 @@ class _RegistrationState extends State<Login> {
                   ),
 
                   child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Login",
-                            style: TextStyling().blckText,
-                          ),
-                        ),
-                        SizedBox(height: 40),
-                        Text(
-                          "Username",
-                          style: TextStyling().greyText,
-                        ),
-                        TextFormField(
-                          controller: usernameController,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              )
-                          ),
-                          validator: (value) {
-                            if(value==null|| value.isEmpty){
-                              return "Please enter username";
-                            }
-                            else if(!RegExp(r'^[A-Z a-z]+$').hasMatch(value)){
-                              return "UserName must contain only alphabetic characters";
-                            }
-                          },
-                        ),
-                        SizedBox(height: 30),
-                        Text(
-                          "Password",
-                          style: TextStyling().greyText,
-                        ),
-                        TextFormField(
-                          controller: passwordController,
-                          obscureText: !_isPasswordVisible,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              icon: Icon(
-                                _isPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
+                      padding: EdgeInsets.all(20),
+                      child: SingleChildScrollView(
+                        child:Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Login",
+                                style: TextStyling().blckText,
                               ),
                             ),
-                          ),
-                          validator: (value){
-                            if (value == null || value.isEmpty) {
-                              return "Field must not be empty";
-                            } else if (value.length < 7) {
-                              return "Password must contain at least 7 characters";
-                            }
-                            return null;
-
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child: TextButton(
-                              onPressed: (){
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>ForgotPassword()));
-                              },
-                              child:Text("I forgot my password",
-                                style: TextStyling().greyText,
+                            SizedBox(height: 40),
+                            Text(
+                              "Username",
+                              style: TextStyling().greyText,
+                            ),
+                            TextFormField(
+                              controller: usernameController,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  )
                               ),
-                            )
-                        ),
-                        SizedBox(height: 30),
-                        Align(
-                          alignment: Alignment.center,
-                          child:  ElevatedButton(
-                            onPressed: () {
-                              // String username = usernameController.text;
-                              // String password = passwordController.text;
-                              if (_formKey.currentState!.validate()) {
-                                login();
-                                //response from sqlite method
-
-                              }},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(width: 80),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30.0),
+                              validator: (value) {
+                                if(value==null|| value.isEmpty){
+                                  return "Please enter username";
+                                }
+                                else if(!RegExp(r'^[A-Z a-z]+$').hasMatch(value)){
+                                  return "UserName must contain only alphabetic characters";
+                                }
+                              },
+                            ),
+                            SizedBox(height: 30),
+                            Text(
+                              "Password",
+                              style: TextStyling().greyText,
+                            ),
+                            TextFormField(
+                              controller: passwordController,
+                              obscureText: !_isPasswordVisible,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPasswordVisible = !_isPasswordVisible;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    _isPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
                                 ),
                               ),
+                              validator: (value){
+                                if (value == null || value.isEmpty) {
+                                  return "Field must not be empty";
+                                } else if (value.length < 7) {
+                                  return "Password must contain at least 7 characters";
+                                }
+                                return null;
+
+                              },
                             ),
-                            child: Text(
-                              "login",
-                              style: TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child:
-                            Row(
-                              children: [
-                                Text("Create Account",
-                                  style: TextStyling().greyText,
-                                ),
-                                SizedBox(width: 5,),
-                                TextButton(
+                            SizedBox(height: 20),
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child: TextButton(
                                   onPressed: (){
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Registration()));
-                                  }, child: Text("Register",style:TextStyle(color: Colors.white),),
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>ForgotPassword()));
+                                  },
+                                  child:Text("I forgot my password",
+                                    style: TextStyling().greyText,
+                                  ),
                                 )
-                              ],
-                            )
-                        ),
-                        isLoginTrue
-                            ?const Text("Username or Password is incorrect",
-                          style: TextStyle(color: Colors.red),
-                        )
-                            :const SizedBox(),
+                            ),
+                            SizedBox(height: 30),
+                            Align(
+                              alignment: Alignment.center,
+                              child:  ElevatedButton(
+                                onPressed: () {
+                                  // String username = usernameController.text;
+                                  // String password = passwordController.text;
+                                  if (_formKey.currentState!.validate()) {
+                                    login();
+                                    //response from sqlite method
 
-                      ],
-                    ),
+                                  }},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(width: 80),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(30.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "login",
+                                  style: TextStyle(color: Colors.white, fontSize: 18),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Align(
+                                alignment: Alignment.bottomRight,
+                                child:
+                                Row(
+                                  children: [
+                                    Text("Create Account",
+                                      style: TextStyling().greyText,
+                                    ),
+                                    SizedBox(width: 5,),
+                                    TextButton(
+                                      onPressed: (){
+                                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Registration()));
+                                      }, child: Text("Register",style:TextStyle(color: Colors.white),),
+                                    )
+                                  ],
+                                )
+                            ),
+                            isLoginTrue
+                                ?const Text("Username or Password is incorrect",
+                              style: TextStyle(color: Colors.red),
+                            )
+                                :const SizedBox(),
+                          ],
+                        ),
+                      )
                   ),
                 ),
               ),
